@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if not current_user.is_anonymous %}
+    <h2>Hello, {{current_user.first_name}}</h2>
+    {% endif %}
+    <hr />
+    <div class='row'>
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Random Album</h5>
+    <p class="card-text">Explore new Albums!</p>
+    <p class="card-text">There are currently {{albums}} albums!</p>
+    <a href="{{ url_for('album', id=range(1, albums) | random) }}" class="btn btn-primary">Go</a>
+  </div>
+</div>
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Random Artist</h5>
+    <p class="card-text">Explore new Artists!</p>
+    <p class="card-text">There are currently {{artists}} artists!</p>
+    <a href="{{ url_for('artist', id=range(1, artists) | random) }}" class="btn btn-primary">Go</a>
+  </div>
+</div>
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Random Profile</h5>
+    <p class="card-text">Explore new Profiles!</p>
+    <p class="card-text">There are currently {{user_count}} profiles!</p>
+    {% if username != None %}
+    <a href="{{ url_for('user', username=username) }}" class="btn btn-primary">Go</a>
+    {% else %}
+        <a href="#" class="btn btn-primary">Go</a>
+    {% endif %}
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}

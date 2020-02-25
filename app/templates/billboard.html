@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for pop in pops %}
+    <h1>The most popular artist is <a href="{{url_for('artist', id=pop.id)}}">{{pop.name}}</a>, with {{most_likes}} likes!! Woohoo!</h1>
+    {% endfor %}
+
+    <h1>The worst-rated genre <a href="{{url_for('worst_genre')}}">is..</a></h1>
+    <h1>The best-rated genre <a href="{{url_for('best_genre')}}">is..</a></h1>
+{% endblock %}

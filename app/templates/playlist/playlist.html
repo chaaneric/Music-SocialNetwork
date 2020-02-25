@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Playlist Page</h1>
+<hr />
+<h3>Make Playlist</h3>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }} <br>
+        {{ form.name(size=32) }}
+        {% for error in form.name.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }} </p>
+</form>
+
+<h3>My Playlists</h3>
+{% if playlists|length != 0 %}
+<div class='row'>
+{% for playlist in playlists %}
+<table>
+    <tr valign="top">
+        <td>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{playlist.name}}</h5>
+                <a href="{{url_for('playlist', playlist_id=playlist.id)}}" class="btn btn-primary">Edit songs</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+{% endfor %}
+</div>
+{% else %}
+{{current_user.first_name}} has no playlists!
+
+{% endif %}
+{% endblock %}

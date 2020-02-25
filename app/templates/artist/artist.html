@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Artists</h1>
+<hr />
+<h2> {{artist.name}}</h2>
+<p>
+	<div>
+	This artist has {{artist.likes}} followers.
+</div>
+<div>
+	{% for follower in artist.followers %}
+	<a href="{{ url_for('user', username=follower.username) }}"><img src={{follower.avatar(64)}}></a>
+	{% endfor %}
+</div>
+</p>
+<p>{% if artist not in current_user.following  %}
+	<a class="btn btn-info" href="{{ url_for('like', id=artist.id) }}">Follow {{artist.name}}</a>
+	{% else %}
+	<a class="btn btn-danger" href="{{ url_for('dislike', id=artist.id) }}">Unfollow</a>
+	{% endif %}
+</p>
+<hr>
+<div class='row'>
+{% for album in albums %}
+<table>
+	<tr valign="top">
+		<td>
+			<div class="card" style="width: 18rem;">
+ 			 <img class="card-img-top" src={{album.get_artwork()}} alt="Card image cap">
+  				<div class="card-body">
+    			<h5 class="card-title">{{album.name}}</h5>
+    			<a href="{{url_for('album', id=album.id)}}" class="btn btn-primary">Songs</a>
+  				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endfor %}
+</div>
+{% endblock %}

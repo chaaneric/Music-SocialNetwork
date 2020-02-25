@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Profile</h1>
+<table style="border: 1px solid black">
+	<tr valign="top">
+		<td><img src="{{ user.avatar(128)}}"></td>
+	</tr>
+	<tr>
+		<td>
+			{% if user != current_user %}
+			{% if not current_user.is_following(user) %}
+			<p><a class="btn btn-info" href="{{ url_for('follow', user_id=user.uid) }}">Follow</a></p>
+			{% else %}
+			<p><a class="btn btn-danger" href="{{ url_for('unfollow', user_id=user.uid) }}">Unfollow</a></p>
+			{% endif %}
+			{% endif %}
+			{% if user == current_user %}
+			<p><a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+			<p><a href="{{ url_for('delete_user', user_id=current_user.uid)}}">Delete Profile</a></p>
+			{% endif %}
+			{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+			{% if user.last_seen %}<p>Last Logged In: {{ date }}</p>{% endif %}
+			<p>Followers: {{user.followers.all()|length}}</p>
+		</td>
+	</tr>
+	<tr>
+		<th>Username</th>
+		<td>{{user.username }}</td>
+	</tr>
+	<tr>
+		<th>Password</th>
+		<td>{{user.password_hash}}</td>
+	</tr>
+	<tr>
+		<th>First Name</th>
+		<td>{{user.first_name}}</td>
+	</tr>
+	<tr>
+		<th>Last Name</th>
+		<td>{{user.last_name}}</td>
+	</tr>
+	<tr>
+		<th>Email</th>
+		<td>{{user.email}}</td>
+	</tr>
+</table>
+<hr>
+
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.body.label }} <br>
+        {{ form.body(size=32) }}
+        {% for error in form.body.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }} </p>
+</form>
+
+<hr />
+{% for post in posts %}
+<table>
+	<tr>
+		<td><img src="{{ post.author.avatar(36) }}"></td>
+		<td><a href="{{ url_for('user', username=post.author.username)}}">{{ post.author.username }}</a> says: <br> {{ post.body }}</td>
+		{% if user == current_user or post.author == current_user %}
+		<td>
+			<form action="{{ url_for('delete', username=user.username, post_id=post.id) }}" method="post">
+				<input type="submit" value=Delete />
+			</form>
+		</td>
+		{% endif %}
+	</tr>
+</table>
+{% endfor %}
+
+
+<hr />
+
+<h2>{{user.first_name}}'s Playlists:</h2>
+<hr />
+{% if playlists|length != 0 %}
+<div class='row'>
+{% for playlist in playlists %}
+<table>
+	<tr valign="top">
+		<td>
+			<div class="card" style="width: 18rem;">
+  				<div class="card-body">
+    			<h5 class="card-title">{{playlist.name}}</h5>
+    			<a href="{{url_for('playlist', playlist_id=playlist.id)}}" class="btn btn-primary">Check out songs</a>
+  				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endfor %}
+</div>
+{% else %}
+{{user.first_name}} has no playlists!
+
+{% endif %}
+
+<hr />
+<h2>{{user.first_name}} is currently following these artists</h2>
+<hr />
+{% if user.following|length != 0 %}
+<div class='row'>
+{% for following in user.following %}
+<table>
+	<tr valign="top">
+		<td>
+			<div class="card" style="width: 18rem;">
+  				<div class="card-body">
+    			<h5 class="card-title">{{following.name}}</h5>
+    			<a href="{{url_for('artist', id=following.id)}}" class="btn btn-primary">Check out songs</a>
+  				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endfor %}
+</div>
+{% else %}
+{{user.first_name}} is not following anyone! Tell him to follow people
+{% endif %}
+
+<hr />
+<h2>{{user.first_name}} is following these users </h2>
+<hr />
+
+{% if user.followed.all()|length != 0 %}
+<div class='row'>
+{% for follower in user.followed.all() %}
+<table>
+	<tr valign="top">
+		<td>
+			<div class="card" style="width: 10rem;">
+				  <a href="{{url_for('user', username=follower.username)}}"><img class="card-img-top" src="{{follower.avatar(180)}}" alt="Card image cap"></a>
+  				<div class="card-body">
+    			<h5 class="card-title">{{follower.username}}</h5>
+  				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endfor %}
+</div>
+{% else %}
+{{user.first_name}} is not following anyone :(
+{% endif %}
+
+
+{% endblock %}

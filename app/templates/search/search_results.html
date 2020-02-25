@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>.</h1>
+<h1>Search Results</h1>
+
+<table style="width:100%">
+    <tr valign="top">
+        <td width="33%"><h2>Artists</h2></td>
+        <td width="33%"><h2>Albums</h2></td>
+        <td width="33%"><h2>Songs</h2></td>
+    </tr>
+</table>
+
+<table width="33%" style="float:left;">
+    {% if artist_results|length == 0 %}
+    <tr valign="top">
+        <td>No artists matched your search.</td>
+    </tr>
+    {% else %}
+    {% for result in artist_results %}
+    <tr valign="top">
+        <td><a href="{{ url_for('artist', id=result.id)}}">{{ result.name }}</a></td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</table>
+
+<table width="33%" style="float:left;">
+    {% if album_results|length == 0 %}
+    <tr valign="top">
+        <td>No albums matched your search.</td>
+    </tr>
+    {% else %}
+    {% for result in album_results %}
+    <tr valign="top">
+        <td><a href="{{ url_for('album', id=result.id)}}">{{ result.name }}</a></td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</table>
+
+<table width="33%" style="float:left;">
+    {% if song_results|length == 0 %}
+    <tr valign="top">
+        <td>No songs matched your search.</td>
+    </tr>
+    {% else %}
+    {% for result in song_results %}
+    <tr valign="top">
+        <td><a href="{{ url_for('album', id=result.album_id)}}">{{ result.name }}</a></td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</table>
+
+{% endblock %}

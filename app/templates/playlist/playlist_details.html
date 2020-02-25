@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>{{playlist.name}}</h1>
+<hr />
+
+{% if user == current_user %}
+<td>
+	<form action="{{ url_for('delete_playlist', playlist_id=playlist.id) }}" method="post">
+		<input type="submit" value='Delete Playlist' />
+	</form>
+</td>
+{% endif %}
+<div class='row'>
+{% if songs|length != 0 %}
+{% for song in songs %}
+
+<div class="card" style="width: 15rem;">
+  <img class="card-img-top" src='{{song.album.get_artwork()}}' alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{song.album.name}}</h5>
+    <p class="card-text">
+    {{song.name}}
+	</p>
+    <a href="{{url_for('album', id=song.album.id)}}" class="btn btn-primary">Go to Album</a>
+    {% if current_user.uid == playlist.user_id %}
+    <a href="{{url_for('delete_song_playlist', playlist_id=playlist.id, song_id=song.id)}}"class="btn btn-danger"><i class="fas fa-times"></i></a>
+    {% endif %}
+  </div>
+</div>
+
+{% endfor %}
+</div>
+{% else %}
+You don't have any songs yet!
+{% endif %}
+
+{% endblock %}

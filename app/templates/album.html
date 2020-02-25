@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    {{name}} by <a href="{{url_for('artist', id=artist.id)}}">{{artist.name}}</a>
+    <p style="text-align:center"><img src="{{album.get_artwork()}}"></p>
+    {% if album_link != 'blank' %}
+    <p style="text-align:center"><iframe width="560" height="99" src="{{album_link}}" frameborder="0" allowtransparency allowfullscreen></iframe>
+        {% endif %}
+    </p>
+</h1>
+<h2>Genre: {{album.genre}}</h2>
+<hr>
+
+<h3>Songs:</h3>
+<table>
+    {% for song in songs %}
+    <tr><td>
+        <div class="btn-group dropright">
+            <div class="col-lg-3">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{song.name}}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-toggle="modal" data-target="#song-{{loop.index}}">Add to Playlist..</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="song-{{loop.index}}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add {{song.name}} to which playlist?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <form action="" method="post">
+                                {{ form.hidden_tag() }}
+                                <p>
+                                    {{ form.song(hidden=true, value=song.id) }}
+                                </p>
+                                <p>
+                                    {{ form.playlist.label }} <br>
+                                    {{ form.playlist }}
+                                    {% for error in form.playlist.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                    {% endfor %}
+                                </p>
+                                <p>{{ form.submit() }} </p>
+                            </form>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</td>
+<td>
+    Average Rating: {{song.rating}}
+</td>
+<td>
+    <div style="margin-left:1em;margin-top:1em">
+    <form action="" method="post">
+            {{ rate_form.hidden_tag() }}
+            {{ rate_form.id(hidden=true, value=song.id) }}
+            {{ rate_form.rating(size=16) }}
+            {{ rate_form.submit() }}
+    </form>
+</div>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
