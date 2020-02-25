@@ -1,6 +1,6 @@
 # Music Social Network
 
-Demo me out [here](musc-social.herokuapp.com)
+Demo me out [here](http://musc-social.herokuapp.com)
 
 ## Before You Start:
 ``` pip install -r requirements.txt ```
