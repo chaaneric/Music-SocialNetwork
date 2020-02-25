@@ -19,7 +19,7 @@ MarkupSafe==1.0
 python-dateutil==2.7.0
 python-editor==1.0.3
 psycopg2==2.8.4
-requests==2.18.4
+requests==2.20.0
 six==1.11.0
 spotipy==2.4.4
 SQLAlchemy==1.2.5
